@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Examen Parcial de Geografía</title>
+  <style>
+    :root {
+      --bg-pastel: #fceef2;
+      --text-main: #0c1b33;
+      --accent-blue: #0044ff;
+      --accent-hover: #002db3;
+      --card-bg: #ffffff;
+      --parchment-bg: #fffdf9;
+      --parchment-border: #d4c5b9;
+      --progress-color: #ff9800;
+      --focus-ring: #ff007f;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-pastel);
+      color: var(--text-main);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 1.5rem 1rem 4.5rem 1rem;
+    }
+
+    .container {
+      max-width: 860px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    /* Pantallas */
+    .screen-card {
+      background: var(--card-bg);
+      border-radius: 1.5rem;
+      padding: 2.2rem;
+      box-shadow: 0 10px 30px rgba(12, 27, 51, 0.08);
+      display: none;
+      flex-direction: column;
+      gap: 1.5rem;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .screen-card.active {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1, h2, h3 {
+      color: var(--text-main);
+      line-height: 1.25;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      text-align: center;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+    }
+
+    /* Navegación */
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1.5rem;
+      padding-top: 1.25rem;
+      border-top: 2px solid #eef2f6;
+    }
+
+    .btn-electric {
+      background-color: var(--accent-blue);
+      color: #ffffff;
+      border: none;
+      padding: 0.85rem 1.75rem;
+      font-size: 1rem;
+      font-weight: 700;
+      border-radius: 0.85rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn-electric:hover {
+      background-color: var(--accent-hover);
+      transform: translateY(-2px);
+    }
+
+    .btn-electric:focus-visible {
+      outline: 4px solid var(--focus-ring);
+      outline-offset: 2px;
+    }
+
+    .btn-secondary {
+      background-color: #e2e8f0;
+      color: var(--text-main);
+      border: none;
+      padding: 0.65rem 1.25rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border-radius: 0.65rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-secondary:hover {
+      background-color: #cbd5e1;
+    }
+
+    .btn-secondary:focus-visible {
+      outline: 4px solid var(--focus-ring);
+      outline-offset: 2px;
+    }
+
+    /* Barra de Progreso Inferior */
+    .progress-container {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: #ffffff;
+      box-shadow: 0 -3px 12px rgba(12, 27, 51, 0.08);
+      padding: 0.5rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      z-index: 1000;
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 10px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 14%;
+      background: var(--progress-color);
+      border-radius: 999px;
+      transition: width 0.4s ease;
+    }
+
+    /* Imágenes */
+    .centered-image-box {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+
+    .map-img {
+      max-width: 100%;
+      max-height: 420px;
+      object-fit: contain;
+      border-radius: 1rem;
+      border: 2px solid #e2e8f0;
+      background: #f8fafc;
+    }
+
+    .author-photo {
+      width: 220px;
+      height: 280px;
+      border-radius: 1.25rem;
+      object-fit: cover;
+      object-position: top center;
+      border: 4px solid var(--accent-blue);
+      box-shadow: 0 6px 18px rgba(0, 68, 255, 0.15);
+    }
+
+    /* Estilo Carta */
+    .parchment {
+      background-color: var(--parchment-bg);
+      border: 2px solid var(--parchment-border);
+      border-radius: 1rem;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      box-shadow: inset 0 0 30px rgba(212, 197, 185, 0.2);
+    }
+
+    .parchment-header {
+      border-bottom: 2px dashed var(--parchment-border);
+      padding-bottom: 0.75rem;
+      font-style: italic;
+      color: #6b5b52;
+    }
+
+    .tradition-block {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 1.25rem;
+      align-items: center;
+      background: #fdfbf7;
+      padding: 1rem;
+      border-radius: 0.75rem;
+      border: 1px solid #ebdcd0;
+      margin-top: 0.75rem;
+    }
+
+    @media (max-width: 600px) {
+      .tradition-block {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .tradition-block img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 0.5rem;
+    }
+
+    /* Reproductores */
+    .media-player-box {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 1rem;
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .warning-box {
+      background-color: #fffbeb;
+      border-left: 4px solid #f59e0b;
+      padding: 0.85rem 1.25rem;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      color: #92400e;
+    }
+
+    .controls-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .btn-control {
+      background: var(--accent-blue);
+      color: #ffffff;
+      border: none;
+      padding: 0.7rem 1.2rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border-radius: 0.6rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .btn-control:hover {
+      background: var(--accent-hover);
+    }
+
+    .btn-control:focus-visible {
+      outline: 3px solid var(--focus-ring);
+      outline-offset: 2px;
+    }
+
+    .time-display {
+      font-variant-numeric: tabular-nums;
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-left: auto;
+      color: #4a5568;
+    }
+
+    .video-full-box {
+      width: 100%;
+      background: #000;
+      border-radius: 1rem;
+      overflow: hidden;
+    }
+
+    video {
+      width: 100%;
+      max-height: 480px;
+      display: block;
+    }
+
+    /* Lugares Turísticos */
+    .dest-card {
+      background: #f8fafc;
+      border: 2px solid #cbd5e1;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin-top: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .place-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    @media (max-width: 768px) {
+      .place-split {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .place-split img {
+      width: 100%;
+      max-height: 280px;
+      object-fit: cover;
+      border-radius: 0.75rem;
+      border: 2px solid #cbd5e1;
+    }
+
+    /* Fuentes */
+    .sources-box {
+      background: #f8fafc;
+      border-radius: 1rem;
+      padding: 1.75rem;
+      border: 1px solid #e2e8f0;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .sources-box ul {
+      padding-left: 1.5rem;
+    }
+
+    .sources-box li {
+      margin-bottom: 0.65rem;
+    }
+
+    .sources-box a {
+      color: var(--accent-blue);
+      text-decoration: underline;
+      word-break: break-all;
+    }
+
+    /* Utilidades */
+    .hidden {
+      display: none !important;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Notificaciones para lector de pantalla -->
+  <div id="live-announcer" class="sr-only" aria-live="polite"></div>
+
+  <main class="container">
+
+    <!-- ================= PANTALLA 1: PORTADA ================= -->
+    <section id="screen-1" class="screen-card active" aria-labelledby="title-p1" tabindex="-1">
+      <h1 id="title-p1">Continente Africano</h1>
+      
+      <div class="centered-image-box">
+        <img class="map-img" src="dataExamen/portada.jpg" alt="Mapa político del continente africano que muestra sus países soberanos, límites territoriales y los océanos Atlántico e Índico.">
+      </div>
+
+      <div class="nav-bar" style="justify-content: flex-end;">
+        <button class="btn-electric btn-next" data-next="2">
+          Siguiente
+        </button>
+      </div>
+    </section>
+
+    <!-- ================= PANTALLA 2: DATOS DE AUTORA ================= -->
+    <section id="screen-2" class="screen-card" aria-labelledby="title-p2" tabindex="-1">
+      <h2 id="title-p2" style="text-align: center;">Jessica Herrera González</h2>
+      
+      <div style="text-align: center; display: flex; flex-direction: column; gap: 0.5rem;">
+        <p style="font-size: 1.25rem; font-weight: 700; color: var(--accent-blue);">Grupo 3</p>
+        <p style="font-size: 1.1rem; font-weight: 600; color: #4a5568;">Examen Parcial de Geografía</p>
+      </div>
+
+      <div class="centered-image-box">
+        <img class="author-photo" src="dataExamen/jess.jpg" alt="Fotografía de la estudiante">
+      </div>
+
+      <div class="nav-bar">
+        <button class="btn-secondary btn-prev" data-prev="1">
+          Atrás
+        </button>
+        <button class="btn-electric btn-next" data-next="3">
+          Siguiente
+        </button>
+      </div>
+    </section>
+
+    <!-- ================= PANTALLA 3: LA CARTA DIARIO ================= -->
+    <section id="screen-3" class="screen-card" aria-labelledby="title-p3" tabindex="-1">
+      <h2 id="title-p3">Diario de Viaje</h2>
+
+      <article class="parchment">
+        <div class="parchment-header">
+          <p><strong>Fecha:</strong> 20 de octubre de 2026</p>
+          <p><strong>Registro:</strong> Entrada de un diario de viaje</p>
+        </div>
+
+        <p><em>Querido diario:</em></p>
+        <p>Hoy escribo desde África, un continente inmenso y diverso. Mientras observo este continente, me doy cuenta de que no puedo resumirlo en una sola lengua, una sola costumbre ni un solo paisaje: aquí conviven muchísimos pueblos, historias y formas de vivir.</p>
+
+        <h3>Dónde estoy</h3>
+        <p>África está entre el océano Atlántico, al oeste, y el océano Índico, al este. Al norte la limita el mar Mediterráneo; al noreste, el mar Rojo y el canal de Suez la separan de Asia. El ecuador cruza la zona central del continente, así que África se extiende por los hemisferios norte y sur; también queda a ambos lados del meridiano de Greenwich, en los hemisferios oriental y occidental. Por eso tiene costas, islas y regiones muy distintas de norte a sur y de este a oeste.</p>
+
+        <div class="centered-image-box">
+          <img class="map-img" src="dataExamen/mapacarta.jpg" alt="Mapa geográfico y político de África que detalla fronteras y regiones.">
+        </div>
+
+        <h3>Una diversidad de lenguas</h3>
+        <p>Me pregunté cuál es el idioma que predomina. La respuesta más precisa es que no existe un único idioma predominante en todo el continente. UNESCO estima que en África se hablan entre 1,500 y 3,000 lenguas. Entre las lenguas de comunicación amplia está el kiswahili (suajili), especialmente importante en África oriental y reconocido como lengua oficial de la Unión Africana. También se hablan ampliamente árabe, inglés, francés, portugués y muchísimas lenguas africanas, según la región.</p>
+
+        <h3>Países y tamaños</h3>
+        <p>África suele contarse con 54 países soberanos reconocidos internacionalmente. La Unión Africana, en cambio, tiene 55 Estados miembros, pues incluye a la República Árabe Saharaui Democrática. El país más grande por superficie es Argelia, con unos 2,381,741 km². El más pequeño es Seychelles, un país insular del océano Índico, con unos 446 km²; en el territorio continental africano, el más pequeño es Gambia.</p>
+
+        <h3>Climas y paisajes</h3>
+        <p>No hay un solo clima africano. Gran parte del continente se encuentra en la zona tropical, por eso son extensos los climas tropicales, con sabanas y estaciones húmedas y secas. También hay climas áridos y desérticos —como el Sahara, el Namib y el Kalahari—, zonas ecuatoriales cálidas y lluviosas, regiones mediterráneas al norte y al sur, y climas de montaña más frescos.</p>
+
+        <h3>Dos tradiciones de regiones distintas</h3>
+        <p>Aprendí que no sería correcto decir que solo existen "dos tradiciones predominantes" para toda África; hay miles y varían entre comunidades. Aquí anoto dos ejemplos concretos:</p>
+
+        <div class="tradition-block">
+          <img src="dataExamen/musicos.jpg" alt="Músicos tradicionales Gnawa en Marruecos desfilando con túnicas azul brillante y gorros bordados mientras tocan los crótalos metálicos sagrados (qraqeb).">
+          <div>
+            <h4>1. La música Gnawa (Marruecos, norte de África)</h4>
+            <p>Tradición de música, canto, prácticas fraternales y rituales que combina elementos espirituales y seculares, con raíces e influencias africanas, árabes-musulmanas y amaziges. Inscrita en la Lista de Patrimonio Cultural Inmaterial por la UNESCO en 2019.</p>
+          </div>
+        </div>
+
+        <div class="tradition-block">
+          <img src="dataExamen/masai.jpg" alt="Cuatro jóvenes de la comunidad Maasai vistiendo sus tradicionales mantas rojas a cuadros y collares ceremoniales de cuentas bajo un cielo azul despejado.">
+          <div>
+            <h4>2. Ritos de paso maasai (Kenia y Tanzania, África oriental)</h4>
+            <p>Ceremonias comunitarias como Enkipata, Eunoto y Olng'esher, relacionadas con etapas de la vida y la transmisión cultural ancestral de las comunidades maasai.</p>
+          </div>
+        </div>
+
+        <p style="margin-top: 1rem;"><em>Con curiosidad,<br><strong>Yo</strong></em></p>
+      </article>
+
+      <div class="nav-bar">
+        <button class="btn-secondary btn-prev" data-prev="2">
+          Atrás
+        </button>
+        <button class="btn-electric btn-next" data-next="4">
+          Siguiente
+        </button>
+      </div>
+    </section>
+
+    <!-- ================= PANTALLA 4: 100 AÑOS DE HISTORIA ================= -->
+    <section id="screen-4" class="screen-card" aria-labelledby="title-p4" tabindex="-1">
+      <h2 id="title-p4">100 Años de Historia</h2>
+
+      <!-- Advertencia explícita -->
+      <div class="warning-box">
+        <p><strong>Aviso:</strong> Recomendable escuchar con auriculares para una experiencia inmersiva completa.</p>
+      </div>
+
+      <div class="media-player-box">
+        <audio id="audio-player" src="dataExamen/100-años-de-historia.wav" preload="metadata"></audio>
+
+        <!-- Controles De izquierda a derecha: -10s, Play/Pausa, +10s -->
+        <div class="controls-row">
+          <button id="audio-back-btn" class="btn-control" aria-label="Retroceder 10 segundos">-10s</button>
+          
+          <button id="audio-play-btn" class="btn-control" aria-label="Reproducir audio">
+            <span id="audio-play-text">Reproducir</span>
+          </button>
+          
+          <button id="audio-fwd-btn" class="btn-control" aria-label="Avanzar 10 segundos">+10s</button>
+
+          <span id="audio-time" class="time-display" aria-live="off">0:00 / 3:06</span>
+        </div>
+
+        <!-- Menú desplegable para velocidades -->
+        <div style="border-top: 1px solid #e2e8f0; padding-top: 1rem;">
+          <button id="btn-toggle-audio-menu" class="btn-secondary" aria-expanded="false" aria-controls="audio-speed-menu">
+            Velocidad de reproducción
+          </button>
+          <div id="audio-speed-menu" class="hidden" style="margin-top: 0.75rem; display: flex; gap: 0.5rem; align-items: center;">
+            <button class="btn-secondary audio-speed-btn" data-speed="1.0">x1</button>
+            <button class="btn-secondary audio-speed-btn" data-speed="1.5">x1.5</button>
+            <button class="btn-secondary audio-speed-btn" data-speed="2.0">x2</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-bar">
+        <button class="btn-secondary btn-prev" data-prev="3">
+          Atrás
+        </button>
+        <button class="btn-electric btn-next" data-next="5">
+          Siguiente
+        </button>
+      </div>
+    </section>
+
+    <!-- ================= PANTALLA 5: CURIOSIDADES ================= -->
+    <section id="screen-5" class="screen-card" aria-labelledby="title-p5" tabindex="-1">
+      <h2 id="title-p5">Curiosidades</h2>
+
+      <div class="media-player-box">
+        <!-- Reproductor de video -->
+        <div class="video-full-box">
+          <video id="video-player" src="dataExamen/curiosidades.mp4" preload="metadata"></video>
+        </div>
+
+        <!-- Controles: Retroceder, Pausa/Play, Avanzar, Silenciar -->
+        <div class="controls-row">
+          <button id="video-back-btn" class="btn-control" aria-label="Retroceder 10 segundos">-10s</button>
+          
+          <button id="video-play-btn" class="btn-control" aria-label="Reproducir video">
+            <span id="video-play-text">Reproducir</span>
+          </button>
+          
+          <button id="video-fwd-btn" class="btn-control" aria-label="Avanzar 10 segundos">+10s</button>
+
+          <button id="video-mute-btn" class="btn-secondary" aria-label="Silenciar video" style="margin-left: auto;">
+            Silenciar
+          </button>
+
+          <span id="video-time" class="time-display" aria-live="off">0:00 / 0:00</span>
+        </div>
+      </div>
+
+      <div class="nav-bar">
+        <button class="btn-secondary btn-prev" data-prev="4">
+          Atrás
+        </button>
+        <button class="btn-electric btn-next" data-next="6">
+          Siguiente
+        </button>
+      </div>
+    </section>
+
+    <!-- ================= PANTALLA 6: LUGARES TURÍSTICOS ================= -->
+    <section id="screen-6" class="screen-card" aria-labelledby="title-p6" tabindex="-1">
+      <h2 id="title-p6">3 Lugares por Visitar</h2>
+      <p style="color: #4a5568;">Pulsa cada botón para desplegar la información y fotografía del destino:</p>
+
+      <div style="display: flex; flex-direction: column; gap: 1rem;">
+        
+        <!-- Destino 1: Esfinge y Guiza -->
+        <div>
+          <button class="btn-electric btn-open-dest" data-target="dest-esfinge" style="width: 100%; justify-content: flex-start;">
+            1. Las Pirámides de Guiza y la Gran Esfinge (Egipto)
+          </button>
+          <div id="dest-esfinge" class="dest-card hidden" tabindex="-1">
+            <h3>La Gran Esfinge y las Pirámides de Guiza</h3>
+            <div class="place-split">
+              <img src="dataExamen/esfinge.jpg" alt="Monumento de la Gran Esfinge de Guiza de perfil en primer plano, con la silueta de una pirámide recortada al fondo.">
+              <div>
+                <p><strong>Ubicación:</strong> Meseta de Guiza, a orillas de El Cairo, Egipto (África del Norte).</p>
+                <p><strong>Bioma:</strong> Desértico cálido con relieve árido.</p>
+                <p><strong>Importancia turística:</strong> Es el vestigio en pie más antiguo de las siete maravillas del mundo clásico, esculpido y edificado hace más de 4,500 años.</p>
+                <p><strong>Dato curioso:</strong> La Esfinge fue tallada directamente en un único bloque colosal de roca caliza natural sobre el lecho rocoso de la meseta.</p>
+              </div>
+            </div>
+            <button class="btn-secondary btn-close-dest" data-target="dest-esfinge" style="align-self: flex-start;">
+              Cerrar destino
+            </button>
+          </div>
+        </div>
+
+        <!-- Destino 2: Serengueti -->
+        <div>
+          <button class="btn-electric btn-open-dest" data-target="dest-cebras" style="width: 100%; justify-content: flex-start;">
+            2. Parque Nacional Serengueti (Tanzania)
+          </button>
+          <div id="dest-cebras" class="dest-card hidden" tabindex="-1">
+            <h3>Parque Nacional Serengueti</h3>
+            <div class="place-split">
+              <img src="dataExamen/cebras.jpg" alt="Grupo de cebras alineadas pastando en la llanura de sabana verde del Parque Nacional Serengueti.">
+              <div>
+                <p><strong>Ubicación:</strong> Región de Mara y Simiyu, norte de Tanzania (África Oriental).</p>
+                <p><strong>Bioma:</strong> Sabana tropical abierta salpicada de acacias.</p>
+                <p><strong>Importancia turística:</strong> Célebre por resguardar una de las reservas de vida silvestre intactas más majestuosas y antiguas de la Tierra.</p>
+                <p><strong>Dato curioso:</strong> Es el escenario clave de la Gran Migración, donde casi dos millones de herbívoros (ñus, cebras y gacelas) recorren más de 800 kilómetros anuales en busca de pastos.</p>
+              </div>
+            </div>
+            <button class="btn-secondary btn-close-dest" data-target="dest-cebras" style="align-self: flex-start;">
+              Cerrar destino
+            </button>
+          </div>
+        </div>
+
+        <!-- Destino 3: Cataratas Victoria -->
+        <div>
+          <button class="btn-electric btn-open-dest" data-target="dest-cataratas" style="width: 100%; justify-content: flex-start;">
+            3. Las Cataratas Victoria (Zambia / Zimbabue)
+          </button>
+          <div id="dest-cataratas" class="dest-card hidden" tabindex="-1">
+            <h3>Las Cataratas Victoria (Mosi-oa-Tunya)</h3>
+            <div class="place-split">
+              <img src="dataExamen/cataratas.jpg" alt="Vista aérea panorámica de las Cataratas Victoria en el río Zambeze, mostrando la imponente caída de agua en el cañón rocoso, una densa nube de rocío blanco y el puente fronterizo.">
+              <div>
+                <p><strong>Ubicación:</strong> Curso del río Zambeze, frontera natural entre Zambia y Zimbabue (África Austral).</p>
+                <p><strong>Bioma:</strong> Cañón rocoso basáltico rodeado de selva fluvial húmeda.</p>
+                <p><strong>Importancia turística:</strong> Una de las mayores láminas de agua descendente del planeta, con una anchura de más de 1,700 metros.</p>
+                <p><strong>Dato curioso:</strong> En lengua indígena lozi se conocen como Mosi-oa-Tunya (el humo que truena), pues su vapor asciende a más de 400 metros formando arcoíris continuos.</p>
+              </div>
+            </div>
+            <button class="btn-secondary btn-close-dest" data-target="dest-cataratas" style="align-self: flex-start;">
+              Cerrar destino
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="nav-bar">
+        <button class="btn-secondary btn-prev" data-prev="5">
+          Atrás
+        </button>
+        <button class="btn-electric btn-next" data-next="7">
+          Siguiente
+        </button>
+      </div>
+    </section>
+
+    <!-- ================= PANTALLA 7: FUENTES ================= -->
+    <section id="screen-7" class="screen-card" aria-labelledby="title-p7" tabindex="-1">
+      <h2 id="title-p7">Fuentes</h2>
+
+      <div class="sources-box">
+        <h3>Jessica Herrera González</h3>
+        <p>Universidad de Guanajuato.</p>
+        <p><strong>Materia:</strong> Geografía · <strong>Evaluación:</strong> Examen Parcial.</p>
+        
+        <hr style="border: 0; border-top: 1px solid #cbd5e1; margin: 0.5rem 0;">
+        
+        <h4>Fuentes Consultadas y Recursos Fotográficos:</h4>
+        <ul>
+          <li><strong>UNESCO:</strong> Lista Representativa del Patrimonio Cultural Inmaterial (Música Gnawa, 2019) y documentación sobre ceremonias ancestrales Maasai y diversidad de lenguas africanas.</li>
+          <li><strong>Encyclopædia Britannica:</strong> Límites geográficos, cuencas oceánicas y datos de superficie continental.</li>
+          <li><strong>Unión Africana (African Union):</strong> Estados miembros soberanos y marco geopolítico continental.</li>
+          <li><strong>Organización de las Naciones Unidas (ONU):</strong> Datos de áreas geográficas oficiales (Argelia y Seychelles) y cronología de independencias.</li>
+          <li><strong>Getty Images (Parque Nacional Serengeti):</strong> <a href="https://www.gettyimages.com.mx/fotos/parque-nacional-serengeti" target="_blank" rel="noopener">https://www.gettyimages.com.mx/fotos/parque-nacional-serengeti</a></li>
+          <li><strong>Getty Images (Parque Nacional de Victoria Falls):</strong> <a href="https://www.gettyimages.es/fotos/parque-nacional-de-victoria-falls" target="_blank" rel="noopener">https://www.gettyimages.es/fotos/parque-nacional-de-victoria-falls</a></li>
+        </ul>
+      </div>
+
+      <div class="nav-bar">
+        <button class="btn-secondary btn-prev" data-prev="6">
+          Atrás
+        </button>
+        <span style="font-weight: 700; color: #10b981;">Fin del recorrido</span>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= BARRA DE PROGRESO INFERIOR ================= -->
+  <footer class="progress-container" role="region" aria-label="Progreso del Examen">
+    <div class="progress-header">
+      <span id="screen-step-label">Pantalla 1 de 7</span>
+      <span id="screen-percent-label">14% completado</span>
+    </div>
+    <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="14" id="progress-bar-widget">
+      <div id="progress-fill" class="progress-bar-fill"></div>
+    </div>
+  </footer>
+
+  <script>
+    const announcer = document.getElementById('live-announcer');
+    function announce(text) {
+      announcer.textContent = '';
+      setTimeout(() => {
+        announcer.textContent = text;
+      }, 50);
+    }
+
+    function formatTime(seconds) {
+      if (isNaN(seconds)) return '0:00';
+      const m = Math.floor(seconds / 60);
+      const s = Math.floor(seconds % 60);
+      return `${m}:${s < 10 ? '0' : ''}${s}`;
+    }
+
+    /* ---------------- SISTEMA DE SONIDOS SUAVES (WEB AUDIO API) ---------------- */
+    let audioCtx = null;
+
+    function getAudioContext() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    // Beep corto y suave al pulsar siguiente
+    function playBeep() {
+      try {
+        const ctx = getAudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(620, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(840, ctx.currentTime + 0.08);
+
+        gain.gain.setValueAtTime(0.04, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.08);
+      } catch (e) {}
+    }
+
+    // 10 tucs rápidos suaves mientras la barra de progreso se desliza (duración aprox 400ms)
+    function playProgressTucs() {
+      try {
+        const ctx = getAudioContext();
+        for (let i = 0; i < 10; i++) {
+          const startTime = ctx.currentTime + (i * 0.038);
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(320 + (i * 12), startTime);
+
+          gain.gain.setValueAtTime(0.02, startTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.02);
+
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+
+          osc.start(startTime);
+          osc.stop(startTime + 0.02);
+        }
+      } catch (e) {}
+    }
+
+    // Sonido de lluvia de estrellas al completar el progreso (Pantalla 7)
+    function playStarShower() {
+      try {
+        const ctx = getAudioContext();
+        const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51, 1567.98, 2093.00, 2637.02];
+        const count = 16;
+        for (let i = 0; i < count; i++) {
+          const startTime = ctx.currentTime + 0.15 + (i * 0.07);
+          const freq = notes[i % notes.length] + (Math.random() * 80 - 40);
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, startTime);
+
+          gain.gain.setValueAtTime(0.03, startTime);
+          gain.gain.exponentialRampToValueAtTime(0.0005, startTime + 0.28);
+
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+
+          osc.start(startTime);
+          osc.stop(startTime + 0.28);
+        }
+      } catch (e) {}
+    }
+
+    /* ---------------- PANTALLAS Y PROGRESO ---------------- */
+    const totalScreens = 7;
+    let currentScreen = 1;
+
+    const progressFill = document.getElementById('progress-fill');
+    const screenStepLabel = document.getElementById('screen-step-label');
+    const screenPercentLabel = document.getElementById('screen-percent-label');
+    const progressBarWidget = document.getElementById('progress-bar-widget');
+
+    function updateProgress(screenNum) {
+      const percentage = Math.round((screenNum / totalScreens) * 100);
+      progressFill.style.width = percentage + '%';
+      progressBarWidget.setAttribute('aria-valuenow', percentage);
+      screenStepLabel.textContent = `Pantalla ${screenNum} de ${totalScreens}`;
+      screenPercentLabel.textContent = `${percentage}% completado`;
+
+      // 10 tucs suaves al desplazarse la barra
+      playProgressTucs();
+
+      // Si se completa el recorrido al 100%, suena la lluvia de estrellas
+      if (screenNum === totalScreens) {
+        setTimeout(() => {
+          playStarShower();
+        }, 380);
+      }
+    }
+
+    function goToScreen(screenNum, isNext = false) {
+      const oldScreen = document.getElementById(`screen-${currentScreen}`);
+      const newScreen = document.getElementById(`screen-${screenNum}`);
+
+      if (!newScreen) return;
+
+      if (isNext) {
+        playBeep();
+      }
+
+      if (currentScreen === 4 && audio && !audio.paused) {
+        audio.pause();
+        audioPlayText.textContent = 'Reproducir';
+      }
+      if (currentScreen === 5 && video && !video.paused) {
+        video.pause();
+        videoPlayText.textContent = 'Reproducir';
+      }
+
+      oldScreen.classList.remove('active');
+      newScreen.classList.add('active');
+      currentScreen = screenNum;
+      updateProgress(screenNum);
+
+      newScreen.focus();
+      const titleElem = newScreen.querySelector('h1, h2');
+      const titleText = titleElem ? titleElem.textContent : `Pantalla ${screenNum}`;
+      announce(`${titleText}. Pantalla ${screenNum} de ${totalScreens}.`);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    document.querySelectorAll('.btn-next').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const nextId = parseInt(btn.dataset.next, 10);
+        goToScreen(nextId, true);
+      });
+    });
+
+    document.querySelectorAll('.btn-prev').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const prevId = parseInt(btn.dataset.prev, 10);
+        goToScreen(prevId, false);
+      });
+    });
+
+    /* ---------------- AUDIO (PANTALLA 4) ---------------- */
+    const audio = document.getElementById('audio-player');
+    const audioPlayBtn = document.getElementById('audio-play-btn');
+    const audioPlayText = document.getElementById('audio-play-text');
+    const audioBackBtn = document.getElementById('audio-back-btn');
+    const audioFwdBtn = document.getElementById('audio-fwd-btn');
+    const audioTime = document.getElementById('audio-time');
+    const btnToggleAudioMenu = document.getElementById('btn-toggle-audio-menu');
+    const audioSpeedMenu = document.getElementById('audio-speed-menu');
+    const audioSpeedBtns = document.querySelectorAll('.audio-speed-btn');
+
+    audioPlayBtn.addEventListener('click', () => {
+      if (audio.paused) {
+        audio.play();
+        audioPlayText.textContent = 'Pausa';
+        audioPlayBtn.setAttribute('aria-label', 'Pausar audio');
+        announce('Audio en reproducción.');
+      } else {
+        audio.pause();
+        audioPlayText.textContent = 'Reproducir';
+        audioPlayBtn.setAttribute('aria-label', 'Reproducir audio');
+        announce('Audio pausado.');
+      }
+    });
+
+    audioBackBtn.addEventListener('click', () => {
+      audio.currentTime = Math.max(0, audio.currentTime - 10);
+      announce(`Retrocedido a ${formatTime(audio.currentTime)}`);
+    });
+
+    audioFwdBtn.addEventListener('click', () => {
+      audio.currentTime = Math.min(audio.duration || 186, audio.currentTime + 10);
+      announce(`Avanzado a ${formatTime(audio.currentTime)}`);
+    });
+
+    audio.addEventListener('timeupdate', () => {
+      const dur = audio.duration || 186;
+      audioTime.textContent = `${formatTime(audio.currentTime)} / ${formatTime(dur)}`;
+    });
+
+    btnToggleAudioMenu.addEventListener('click', () => {
+      const isHidden = audioSpeedMenu.classList.contains('hidden');
+      if (isHidden) {
+        audioSpeedMenu.classList.remove('hidden');
+        btnToggleAudioMenu.setAttribute('aria-expanded', 'true');
+        btnToggleAudioMenu.textContent = 'Ocultar velocidades';
+        announce('Menú de velocidades desplegado');
+      } else {
+        audioSpeedMenu.classList.add('hidden');
+        btnToggleAudioMenu.setAttribute('aria-expanded', 'false');
+        btnToggleAudioMenu.textContent = 'Velocidad de reproducción';
+        announce('Menú de velocidades oculto');
+      }
+    });
+
+    audioSpeedBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const speed = parseFloat(btn.dataset.speed);
+        audio.playbackRate = speed;
+        announce(`Velocidad cambiada a ${speed}x`);
+      });
+    });
+
+    /* ---------------- VIDEO (PANTALLA 5) ---------------- */
+    const video = document.getElementById('video-player');
+    const videoPlayBtn = document.getElementById('video-play-btn');
+    const videoPlayText = document.getElementById('video-play-text');
+    const videoBackBtn = document.getElementById('video-back-btn');
+    const videoFwdBtn = document.getElementById('video-fwd-btn');
+    const videoTime = document.getElementById('video-time');
+    const videoMuteBtn = document.getElementById('video-mute-btn');
+
+    videoPlayBtn.addEventListener('click', () => {
+      if (video.paused) {
+        video.play();
+        videoPlayText.textContent = 'Pausa';
+        videoPlayBtn.setAttribute('aria-label', 'Pausar video');
+        announce('Video en reproducción.');
+      } else {
+        video.pause();
+        videoPlayText.textContent = 'Reproducir';
+        videoPlayBtn.setAttribute('aria-label', 'Reproducir video');
+        announce('Video pausado.');
+      }
+    });
+
+    videoBackBtn.addEventListener('click', () => {
+      video.currentTime = Math.max(0, video.currentTime - 10);
+      announce(`Video retrocedido a ${formatTime(video.currentTime)}`);
+    });
+
+    videoFwdBtn.addEventListener('click', () => {
+      video.currentTime = Math.min(video.duration || 60, video.currentTime + 10);
+      announce(`Video avanzado a ${formatTime(video.currentTime)}`);
+    });
+
+    video.addEventListener('timeupdate', () => {
+      const dur = video.duration || 0;
+      videoTime.textContent = `${formatTime(video.currentTime)} / ${formatTime(dur)}`;
+    });
+
+    videoMuteBtn.addEventListener('click', () => {
+      video.muted = !video.muted;
+      videoMuteBtn.textContent = video.muted ? 'Desmutear' : 'Silenciar';
+      announce(video.muted ? 'Video silenciado' : 'Video con sonido');
+    });
+
+    /* ---------------- LUGARES TURÍSTICOS (PANTALLA 6) ---------------- */
+    const openDestBtns = document.querySelectorAll('.btn-open-dest');
+    const closeDestBtns = document.querySelectorAll('.btn-close-dest');
+
+    openDestBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.dataset.target;
+        const targetCard = document.getElementById(targetId);
+
+        document.querySelectorAll('.dest-card').forEach(card => {
+          if (card.id !== targetId) card.classList.add('hidden');
+        });
+
+        targetCard.classList.remove('hidden');
+        targetCard.focus();
+        announce(`Destino abierto: ${btn.textContent.trim()}`);
+      });
+    });
+
+    closeDestBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.dataset.target;
+        const targetCard = document.getElementById(targetId);
+        targetCard.classList.add('hidden');
+        const triggerBtn = document.querySelector(`.btn-open-dest[data-target="${targetId}"]`);
+        if (triggerBtn) triggerBtn.focus();
+        announce('Destino cerrado.');
+      });
+    });
+  </script>
+</body>
+</html>
